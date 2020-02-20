@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>Admin</title>
+</head>
+<body>
+<nav class="navbar navbar-light bg-dark">
+    <a href="/logout">Logout</a>
+</nav>
+
+
+<div class="row">
+    <script>
+        function func() {
+            document.location.href = '/profile'
+        }
+
+    </script>
+        <div class="col-2 m-3">
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-home-tab" data-toggle="pill" href="#v-pills-home" role="tab" aria-controls="v-pills-home" aria-selected="true">Admin</a>
+                <a class="nav-link" id="v-pills-profile-tab" data-toggle="pill" href="#v-pills-profile" onclick="func()" role="tab" aria-controls="v-pills-profile" aria-selected="false">User</a>
+            </div>
+        </div>
+
+    <div class="container">
+        <div class="col-12">
+            <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">    <div class="container">
+                    <nav class="p-4">
+                        <h2>Admin panel</h2>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Users table</a>
+                            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">New user</a>
+                        </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Password</th>
+                                    <th scope="col">Role</th>
+                                    <th scope="col">Edit</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+
+                                <tr th:each="user : ${usersList}">
+                                    <td th:text="${user.id}"></td>
+                                    <td th:text="${user.username}"> </td>
+                                    <td th:text="${user.userpassword}"></td>
+                                    <td th:text="${user.authority}"></td>
+                                    <td>
+                                        <button type="button" class="btn btn-primary" data-toggle="modal" th:attr="onclick='javascript:showFunctionModal(\''+${user.id}+ '\',\''+${user.username}+'\',\''+${user.userpassword}+'\',\''+${user.authority}+'\');'">
+                                            Edit
+                                        </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+
+
+
+                        <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <form action="/registrationAdmin" method="post" class="col-sm-5">
+                                <div class="form-group">
+                                    <label for="exampleInputEmail1">Email address</label>
+                                    <input type="email" name="username" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleInptPassword">Password</label>
+                                    <input type="password" name="userpassword" id="exampleInptPassword" class="form-control">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleRoleInput">Role</label>
+                                    <select name="roleName" class="form-control" id="exampleRoleInput">
+                                        <option value="ROLE_USER">USER</option>
+                                        <option value="ROLE_ADMIN">ADMIN</option>
+                                    </select>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Add User</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+
+                <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+ </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" data-backdrop="static" tabindex="-1" role="dialog" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">Edit user . . .</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/update" method="post" class="form-horizontal" role="form">
+            <div class="modal-body">
+                <div class="modal-body">
+                        <div class="form-group">
+                            <label class="col-sm-3 control-label" for="userIdInput">ID</label>
+                            <div class="col-sm-9">
+                                <input type="number" name="id" class="form-control" id="userIdInput" readonly />
+                            </div>
+
+                            <label class="col-sm-3 control-label" for="userNameInput">Username</label>
+                            <div class="col-sm-9">
+                                <input type="email" name="username" class="form-control" id="userNameInput" />
+                            </div>
+
+
+                            <label class="col-sm-3 control-label" for="passwordInput">Password</label>
+                            <div class="col-sm-9">
+                                <input type="password" name="userpassword" class="form-control" id="passwordInput" />
+                            </div>
+
+                        <label class="col-sm-3 control-label" for="roleFormSelect">Role</label>
+                        <div class="col-sm-9">
+                        <select name="role" class="form-control" id="roleFormSelect">
+                            <option value="ROLE_USER">USER</option>
+                            <option value="ROLE_ADMIN">ADMIN</option>
+                        </select>
+                        </div>
+
+                        </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary">Edit user</button>
+            </div>
+        </div>
+    </form>
+    </div>
+</div>
+</div>
+
+
+
+
+
+
+    <script>
+        function showFunctionModal(id, username, password, autority) {
+            $(document).ready(function () {
+                $('#myModal').modal();
+                $("#userIdInput").val(id);
+                $("#userNameInput").val(username);
+                $("#passwordInput").val(password);
+                $("#roleFormSelect").val(autority);
+            });
+        }
+    </script>
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+</body>
+</html>
